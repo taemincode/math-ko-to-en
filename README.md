@@ -7,7 +7,7 @@ A playful, Duolingo‑inspired web app to learn Korean ↔ English math terms. B
 Note: This project is vibe coded — it was created by prompting an AI from natural language to working code.
 
 ## Why I made this
-I was reviewing math terms in Enlish to get prepared for school (It was about a week before school) and thought that it would be useful to have something like quizlet but my own version. I explicitly asked it to look like Duolingo because I've always liked their design.
+I was reviewing math terms in Enlish to get prepared for school (It was about a week before school) and thought that it would be useful to have something like quizlet korean math version. I explicitly asked it to look like Duolingo because I've always liked their design.
 
 ## Features
 - Duolingo‑style HUD: XP ⭐, Hearts ❤️, and Streak 🔥 with micro‑animations
