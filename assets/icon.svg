@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" role="img" aria-label="Pi logo on Duolingo green">
+  <defs>
+    <!-- Duolingo-like green gradient -->
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#7EE000"/>
+      <stop offset="1" stop-color="#58CC02"/>
+    </linearGradient>
+
+    <!-- Soft shadow -->
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.25"/>
+    </filter>
+
+    <!-- Slight inner gloss -->
+    <linearGradient id="gloss" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.25"/>
+      <stop offset="0.5" stop-color="#FFFFFF" stop-opacity="0.05"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Rounded square background -->
+  <rect x="6" y="6" width="116" height="116" rx="24" fill="url(#bg)" filter="url(#shadow)"/>
+
+  <!-- Subtle inner highlight -->
+  <rect x="6" y="6" width="116" height="58" rx="24" fill="url(#gloss)" pointer-events="none"/>
+
+  <!-- Pi symbol -->
+  <!-- Built from a path so it scales nicely and feels logo-like -->
+  <g transform="translate(64 68) scale(1.05)">
+    <!-- Outer stroke for definition -->
+    <path d="M-26 -22
+             c0 -6 5 -10 13 -10 h52
+             c2 0 4 2 4 4 c0 2 -2 4 -4 4 h-10
+             v34 c0 8 5 10 11 10 c3 0 6 -0.6 8 -1.5
+             c2 -0.8 4 0.3 4 2.6 c0 2 -1.3 3.6 -3.2 4.6
+             c-3.9 2 -8.6 3 -13.3 3 c-12.5 0 -19.5 -6.1 -19.5 -18.3
+             v-35 h-12 v52 c0 2.2 -1.8 4 -4 4 s-4 -1.8 -4 -4 v-52 h-11
+             c-8 0 -11 -4 -11 -9z"
+          fill="#FFFFFF" stroke="#2A7B00" stroke-width="4" stroke-linejoin="round"/>
+  </g>
+
+  <!-- Tiny border for polish -->
+  <rect x="6" y="6" width="116" height="116" rx="24" fill="none" stroke="#2A7B00" stroke-opacity="0.25" stroke-width="2"/>
+</svg>

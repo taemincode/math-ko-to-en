@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>KR-EN Math Quiz</title>
+  <meta name="description" content="Korean-English math term quiz by school level. Multiple choice, typing, and flashcards." />
+  <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+  <!-- Google Fonts: Nunito + Noto Sans KR -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="app-header" role="banner">
+    <div class="brand">
+      <img src="assets/icon.svg" alt="KR-EN Math Quiz logo" width="32" height="32" />
+      <h1 aria-label="KR-EN Math Quiz">KR-EN Math Quiz</h1>
+    </div>
+
+    <div class="header-center">
+      <div id="breadcrumb" class="breadcrumb" aria-live="polite"></div>
+    </div>
+
+    <div class="header-actions">
+      <div class="hud" aria-label="Game status">
+        <span class="chip xp" aria-label="XP">⭐ <strong id="xp">0</strong></span>
+        <span class="chip hearts" aria-label="Hearts">❤️ <strong id="hearts">5</strong></span>
+        <span class="chip streak" aria-label="Streak">🔥 <strong id="streak">0</strong></span>
+      </div>
+      <label for="modeSelect" class="visually-hidden">Quiz Mode</label>
+      <select id="modeSelect" aria-label="Quiz Mode">
+        <option value="mcq">Multiple Choice</option>
+        <option value="typing">Typing</option>
+        <option value="flash">Flashcards</option>
+      </select>
+
+      <button id="btnExport" class="secondary" aria-label="Export CSV (current level)" disabled>Export CSV</button>
+      <button id="btnImport" class="secondary" aria-label="Import CSV to current level" disabled>Import CSV</button>
+      <input id="fileInput" type="file" accept=".csv,text/csv" class="visually-hidden" aria-hidden="true" tabindex="-1" />
+
+      <button id="btnReset" class="danger" aria-label="Reset progress">Reset</button>
+    </div>
+  </header>
+
+  <main id="app" class="app-main">
+    <!-- Level selection view -->
+    <section id="view-levels" aria-labelledby="levels-title">
+      <div class="container">
+        <h2 id="levels-title">수준 선택</h2>
+        <div id="levelsGrid" class="levels-grid" role="list"></div>
+      </div>
+    </section>
+
+    <!-- Quiz view -->
+    <section id="view-quiz" aria-labelledby="quiz-title" hidden>
+      <div class="container">
+      <div class="quiz-header">
+        <h2 id="quiz-title">퀴즈</h2>
+
+        <div class="quiz-stats">
+          <div class="stat">
+            <span class="stat-label">문제</span>
+            <span id="statQ" class="stat-value">0/0</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">점수</span>
+            <span id="statScore" class="stat-value">0</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">연속</span>
+            <span id="statStreak" class="stat-value">0</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">시간</span>
+            <span id="statTime" class="stat-value">00:00</span>
+          </div>
+        </div>
+
+        <div class="progress progress-wrap" aria-label="Progress">
+          <div id="progressBar" class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
+        </div>
+      </div>
+
+  <div id="questionCard" class="card question-card" aria-live="polite">
+        <div id="questionStem" class="question-stem" aria-label="Korean term"></div>
+
+        <!-- Multiple Choice -->
+        <div id="mcqOptions" class="options" role="group" aria-label="English options"></div>
+
+        <!-- Typing -->
+        <div id="typingWrap" class="typing-wrap" hidden>
+          <label class="visually-hidden" for="typingInput">Type the English term</label>
+          <input id="typingInput" type="text" inputmode="latin-name" autocomplete="off" spellcheck="false" placeholder="Type answer in English and press Enter" />
+        </div>
+
+        <!-- Flashcards -->
+        <div id="flashWrap" class="flash-wrap" hidden>
+          <div id="flashCard" class="flash-card" tabindex="0" role="button" aria-pressed="false" aria-label="Flashcard; press F to flip">
+            <div class="flash-inner">
+              <div class="flash-front"></div>
+              <div class="flash-back"></div>
+            </div>
+          </div>
+          <div class="flash-actions">
+            <button id="btnAgain" class="secondary" aria-label="Mark Again (requeue)">Again</button>
+            <button id="btnGotIt" class="primary" aria-label="Mark Got it">Got it</button>
+          </div>
+        </div>
+
+        <div id="hintArea" class="hint-area" hidden>
+          <span class="hint-label">Hint</span>
+          <span id="hintText"></span>
+        </div>
+
+        <div id="feedback" class="feedback" aria-live="assertive"></div>
+      </div>
+
+  <div class="quiz-actions">
+        <button id="btnSkip" class="secondary" aria-label="Skip question">Skip</button>
+        <button id="btnHint" class="secondary" aria-label="Reveal hint">Reveal hint</button>
+        <button id="btnReport" class="secondary" aria-label="Report issue">Report issue</button>
+        <button id="btnNext" class="primary" aria-label="Next question" hidden>Next</button>
+        <button id="btnEnd" class="secondary" aria-label="End quiz and see results" hidden>End</button>
+      </div>
+  </div>
+    </section>
+
+    <!-- Results view -->
+    <section id="view-results" aria-labelledby="results-title" hidden>
+      <div class="container">
+      <h2 id="results-title">결과</h2>
+      <div class="card results-card">
+        <div class="results-summary">
+          <div><strong>정확도:</strong> <span id="resAccuracy">0%</span></div>
+          <div><strong>총 시간:</strong> <span id="resTime">00:00</span></div>
+          <div><strong>총 문제:</strong> <span id="resTotal">0</span></div>
+          <div><strong>맞은 개수:</strong> <span id="resCorrect">0</span></div>
+          <div><strong>틀린 개수:</strong> <span id="resWrong">0</span></div>
+        </div>
+
+        <h3>틀린 용어</h3>
+        <ul id="missedList" class="missed-list" aria-live="polite"></ul>
+
+        <div class="results-actions">
+          <button id="btnRetryMissed" class="primary" aria-label="Retry missed only (R)">Retry missed only</button>
+          <button id="btnBackHome" class="secondary" aria-label="Back to level selection">Back to Levels</button>
+        </div>
+      </div>
+  </div>
+    </section>
+  </main>
+
+  <!-- Modal -->
+  <div id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" hidden>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modalTitle"></h3>
+        <button id="modalClose" class="icon-btn" aria-label="Close modal">✕</button>
+      </div>
+      <div id="modalBody" class="modal-body"></div>
+      <div id="modalActions" class="modal-actions"></div>
+    </div>
+  </div>
+
+  <!-- Toasts -->
+  <div id="toasts" class="toasts" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- Screen reader live region -->
+  <div id="sr-live" class="visually-hidden" aria-live="polite" aria-atomic="true"></div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
